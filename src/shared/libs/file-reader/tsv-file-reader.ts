@@ -2,7 +2,7 @@ import {FileReader} from './file-reader.interface.js';
 import {readFileSync} from 'node:fs';
 import {AmenitiesType, HouseType, Offer, UserStatusType} from '../../types/index.js';
 
-export class TsvFileReader implements FileReader {
+export class TSVFileReader implements FileReader {
   private rawData = '';
 
   constructor(
