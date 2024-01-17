@@ -19,5 +19,6 @@ export type Offer = {
   rentPrice: number;
   amenities: AmenitiesType[];
   user: User;
+  countComments: number;
   location: Location;
 }

@@ -41,8 +41,8 @@ export class TSVFileReader implements FileReader {
           username,
           email,
           avatarPath,
-          password,
           status,
+          countComments,
           latitude,
           longitude
         ]) => ({
@@ -59,14 +59,14 @@ export class TSVFileReader implements FileReader {
         countRooms: Number.parseInt(countRooms, 10),
         countGuests: Number.parseInt(countGuests, 10),
         rentPrice: Number.parseInt(rentPrice, 10),
-        amenities: amenities.split(';').map((amenity) => amenity as AmenitiesType),
+        amenities: amenities.split(';') as AmenitiesType[] ,
         user: {
           username,
           email,
           avatarPath,
-          password,
           status: status as UserStatusType
         },
+        countComments: Number.parseInt(countComments, 10),
         location: {
           latitude: Number.parseFloat(latitude),
           longitude: Number.parseFloat(longitude),
