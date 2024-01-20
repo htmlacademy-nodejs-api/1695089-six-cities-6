@@ -2,7 +2,7 @@ import {OfferGenerator} from './offer-generator.interface.js';
 import {MockServerData} from '../../types/index.js';
 import {getRandomItem, getRandomItems} from '../../helpers/index.js';
 
-export class TsvOfferGenerator implements OfferGenerator {
+export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
   generate(): string {
     const title = getRandomItem(this.mockData.titles);
