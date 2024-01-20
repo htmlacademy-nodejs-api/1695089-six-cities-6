@@ -1,0 +1,126 @@
+{
+  "api": {
+    "titles": [
+      "Nice, cozy, warm big bed apartment",
+      "Beautiful &amp; luxurious apartment at great location",
+      "Canal View Prinsengracht",
+      "Wood and stone place",
+      "Luxurious apartment at great location",
+      "Beautiful &amp; luxurious apartment at great location"
+    ],
+    "descriptions": [
+      "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam.",
+      "An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.",
+      "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.",
+      "An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.",
+      "The building is green and from 18th century, but where the bustle of the city comes to rest in this alley flowery and colorful.",
+      "The building is green and from 18th century, but where the bustle of the city comes to rest in this alley flowery and colorful."
+    ],
+    "publicationDates": [
+      "2024-01-07T18:43:43.266Z",
+      "2024-01-10T18:43:43.266Z",
+      "2024-01-11T18:43:43.266Z",
+      "2024-01-12T18:43:43.266Z",
+      "2024-01-16T18:43:43.266Z",
+      "2024-01-20T18:43:43.266Z"
+    ],
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "imagePreview": [
+      "apartment-01.jpg",
+      "apartment-02.jpg",
+      "apartment-03.jpg",
+      "apartment-small-03.jpg",
+      "apartment-small-04.jpg"
+    ],
+    "photos": [
+      [
+        "apartment-01.jpg",
+        "apartment-02.jpg",
+        "apartment-03.jpg",
+        "amsterdam.jpg",
+        "apartment-small-03.jpg",
+        "room.jpg"
+      ]
+    ],
+    "premium": [true, false],
+    "favorites": [true, false],
+    "rating": [1, 2, 3.5, 4, 4.8, 4.5],
+    "houseType": [
+      "Room",
+      "Apartment",
+      "House",
+      "Hotel"
+    ],
+    "countRooms": [1, 2, 3, 4],
+    "countGuests": [1, 2, 3, 4, 5, 6, 7, 8],
+    "rentPrices": [120, 140, 160, 250, 440],
+    "amenities": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "usernames": [
+      "Alex",
+      "Marina",
+      "Tanya",
+      "Jon",
+      "Hulk"
+    ],
+    "emails": [
+      "Oliver.conner@gmail.com",
+      "snow@pisem.local",
+      "president@dka.local",
+      "fish@big.local",
+      "test@pisem.local",
+      "freedom@pisem.local",
+      "rolan@pochta.local",
+      "author@mir.local",
+      "test@lost.loca",
+      "kujo-fan@story.local"
+    ],
+    "avatarPaths": [
+      "avatar.svg",
+      "avatar-angelina.jpg",
+      "avatar-max.jpg"
+    ],
+    "status": ["usual", "pro"],
+    "countComments": [12, 34, 22, 54],
+    "location": [
+      [
+        48.85661,
+        2.351499
+      ],
+      [
+        50.938361,
+        6.959974
+      ],
+      [
+        50.846557,
+        4.351697
+      ],
+      [
+        52.370216,
+        4.895168
+      ],
+      [
+        53.550341,
+        10.000654
+      ],
+      [
+        51.225402,
+        6.776314
+      ]
+    ]
+  }
+}
