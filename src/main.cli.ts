@@ -1,5 +1,5 @@
 #!/bin/sh
-import {CliApplication, HelpCommand, ImportCommand, VersionCommand} from './cli/index.js';
+import {CliApplication, GenerateCommand, HelpCommand, ImportCommand, VersionCommand} from './cli/index.js';
 
 function bootstrap() {
   const cliApplication = new CliApplication();
@@ -7,6 +7,7 @@ function bootstrap() {
     new HelpCommand(),
     new VersionCommand(),
     new ImportCommand(),
+    new GenerateCommand()
   ]);
 
   cliApplication.processCommand(process.argv);
