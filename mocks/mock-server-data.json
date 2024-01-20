@@ -32,7 +32,7 @@
       "Hamburg",
       "Dusseldorf"
     ],
-    "imagePreview": [
+    "imagePreviews": [
       "apartment-01.jpg",
       "apartment-02.jpg",
       "apartment-03.jpg",
@@ -51,8 +51,8 @@
     ],
     "premium": [true, false],
     "favorites": [true, false],
-    "rating": [1, 2, 3.5, 4, 4.8, 4.5],
-    "houseType": [
+    "ratings": [1, 2, 3.5, 4, 4.8, 4.5],
+    "houseTypes": [
       "Room",
       "Apartment",
       "House",
@@ -96,7 +96,7 @@
     ],
     "status": ["usual", "pro"],
     "countComments": [12, 34, 22, 54],
-    "location": [
+    "locations": [
       [
         48.85661,
         2.351499

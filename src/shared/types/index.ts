@@ -4,3 +4,4 @@ export * from './house.type.js';
 export * from './amenities.type.js';
 export * from './location.type.js';
 export * from './user-status.type.js';
+export * from './mock-server-data.type.js';
