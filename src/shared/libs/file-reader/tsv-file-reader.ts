@@ -1,15 +1,14 @@
 import {FileReader} from './file-reader.interface.js';
-import {readFileSync} from 'node:fs';
+import EventEmitter from 'node:events';
 
 
-export class TSVFileReader implements FileReader {
-  private rawData = '';
+export class TSVFileReader extends EventEmitter implements FileReader {
 
-  constructor(
-    private readonly filename: string
-  ) {}
+  constructor(private readonly filename: string) {
+    super();
+  }
 
   public read() {
-    this.rawData = readFileSync(this.filename, {encoding: 'utf-8'});
+
   }
 }
