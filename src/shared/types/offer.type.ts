@@ -6,7 +6,7 @@ import {Location} from './location.type.js';
 export type Offer = {
   title: string;
   description: string;
-  publicationDate: string;
+  publicationDate: Date;
   city: string;
   imagePreview: string;
   photos: string[];
