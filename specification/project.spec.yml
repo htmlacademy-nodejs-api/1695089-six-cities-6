@@ -7,6 +7,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
+
 tags:
   - name: comments
     description: Действия с комментариями
@@ -14,3 +15,166 @@ tags:
     description: Действия с объявлениями
   - name: users
     description: Действия с пользователем
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        201:
+          description: Пользователь зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        409:
+          description: Пользователь с таким email уже существует
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизирует пользователя на основе логина и пароля
+
+      requestBody:
+        description: Информация для входа в закрытую часть приложения
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+
+      responses:
+        200:
+          description: Пользователь авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        401:
+          description: Непрвильный логин или пароль. Или такой пользователь не существует
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Сервис предоставляет ресурс для проверки состояния клиента — авторизован или нет.
+        Если клиент авторизован, сервис возвращает соответствующий код состояния и информацию о пользователе
+
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Проверка авторизаций пройдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        401:
+          description: Срок действия токена истек.
+
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение пользовательского сеанса
+      description: Если токен прошёл проверку, сервис завершает пользовательский сеанс (сессию).
+        В противном случае возвращает ошибку и соответствующий код состояния.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '201':
+          description: Cервис завершает пользовательский сеанс (сессию).
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Срок действия токена истек
+
+components:
+  schemas:
+    authUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: zholud.artem@gmail.com
+
+        password:
+          type: string
+          example: sadfscvkwer2324324SDWE3_$
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 123dfdg34kfdsklfew423432
+
+        username:
+          type: string
+          example: Артем Жолудь
+
+        avatarPath:
+          type: string
+          example: example-path-to-img.png
+
+        status:
+          type: string
+          enum:
+            - usual
+            - pro
+          example: pro
+
+
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: zholud.artem@gmail.com
+
+        username:
+          type: string
+          example: Артем Жолудь
+
+        password:
+          type: string
+          example: zdDwe34x_fdl234
+
+    token:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: tokenAuthorization
