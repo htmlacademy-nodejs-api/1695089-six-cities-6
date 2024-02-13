@@ -56,7 +56,7 @@ export class DefaultOfferService implements OfferService {
     ])
       .exec();
 
-    console.log(result[0]);
+
     return result[0] ?? null;
   }
 
