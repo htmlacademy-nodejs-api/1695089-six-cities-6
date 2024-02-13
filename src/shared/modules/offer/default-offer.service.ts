@@ -6,7 +6,9 @@ import {inject, injectable} from 'inversify';
 import {Component, SortType} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
-import {DEFAULT_OFFER_PREMIUM_COUNT} from './offer.constants.js';
+import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './offer.constants.js';
+import {Types} from 'mongoose';
+
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -25,15 +27,61 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel
-      .findById(offerId)
-      .populate(['userId'])
+    // return this.offerModel
+    //   .findById(offerId)
+    //   .populate(['userId'])
+    //   .exec();
+
+    const result = await this.offerModel.aggregate([
+      {
+        $match: { _id: new Types.ObjectId(offerId) }
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'offerId',
+          as: 'comments',
+        }
+      },
+      {
+        $addFields: {
+          commentCount: {$size: '$comments'},
+          totalRating: {$avg: '$comments.rating'},
+        }
+      },
+      {
+        $unset: 'comments'
+      }
+    ])
       .exec();
+
+    console.log(result[0]);
+    return result[0] ?? null;
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find()
-      .populate(['userId'])
+  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
+    // return this.offerModel.find().populate(['userId']).exec();
+    const limit = count ?? DEFAULT_OFFER_COUNT;
+    return this.offerModel.aggregate([
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'offerId',
+          as: 'comments',
+        }
+      },
+      {
+        $addFields: {
+          commentCount: {$size: '$comments'},
+          totalRating: {$avg: '$comments.rating'},
+        }
+      },
+      { $unset: ['comments'] },
+      { $sort: { createdAt: SortType.Down } },
+      { $limit: limit },
+    ])
       .exec();
   }
 

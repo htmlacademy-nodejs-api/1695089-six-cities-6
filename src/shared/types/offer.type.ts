@@ -12,13 +12,13 @@ export type Offer = {
   photos: string[];
   premium: boolean;
   favorites: boolean;
-  rating: number;
+  rating?: number;
   houseType: HouseType;
   countRooms: number;
   countGuests: number;
   rentPrice: number;
   amenities: AmenitiesType[];
   user: User;
-  countComments: number;
+  countComments?: number;
   location: Location;
 }
