@@ -5,10 +5,14 @@ import {Component} from '../shared/types/index.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoURI} from '../shared/helpers/index.js';
 import {OfferService} from '../shared/modules/offer/index.js';
+import express, {Express} from 'express';
+
 // import {CommentService} from '../shared/modules/comment/index.js';
 
 @injectable()
 export class RestApplication {
+  private readonly server: Express;
+
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
@@ -16,6 +20,7 @@ export class RestApplication {
     @inject(Component.OfferService) private readonly offerService: OfferService,
     // @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
+    this.server = express();
   }
 
   private async initDb() {
@@ -30,14 +35,21 @@ export class RestApplication {
     return this.databaseClient.connect(mongoURI);
   }
 
+  private async _initServer() {
+    const port = this.config.get('PORT');
+    this.server.listen(port);
+  }
+
   public async init() {
     this.logger.info('Application initialization');
-    this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
-
 
     this.logger.info('Init database...');
     await this.initDb();
     this.logger.info('Init database completed');
+
+    this.logger.info('Try to init server…');
+    await this._initServer();
+    this.logger.info(`🚀 Server started on http://localhost:${this.config.get('PORT')}`);
 
     const offer = await this.offerService.findById('65cbd3f22bafc2e35c2fe2e7');
     // const comment = await this.commentService.create({
