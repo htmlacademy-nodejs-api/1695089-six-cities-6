@@ -4,13 +4,17 @@ import {injectable, inject} from 'inversify';
 import {Component} from '../shared/types/index.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoURI} from '../shared/helpers/index.js';
+import {OfferService} from '../shared/modules/offer/index.js';
+// import {CommentService} from '../shared/modules/comment/index.js';
 
 @injectable()
 export class RestApplication {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
-    @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient
+    @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
+    @inject(Component.OfferService) private readonly offerService: OfferService,
+    // @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
   }
 
@@ -34,5 +38,17 @@ export class RestApplication {
     this.logger.info('Init database...');
     await this.initDb();
     this.logger.info('Init database completed');
+
+    const offer = await this.offerService.findById('65cbd3f22bafc2e35c2fe2e7');
+    // const comment = await this.commentService.create({
+    //   text: 'test comment 2',
+    //   rating: 2,
+    //   offerId: '65cbd3f22bafc2e35c2fe2e7',
+    //   userId: '65cbd3f22bafc2e35c2fe2e5'
+    // });
+
+    // this.logger.info(`comment: ${comment}`);
+
+    this.logger.info(`allOffers: ${offer}`);
   }
 }

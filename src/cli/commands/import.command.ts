@@ -61,13 +61,11 @@ export class ImportCommand implements Command {
       photos: offer.photos,
       premium: offer.premium,
       favorites: offer.favorites,
-      rating: offer.rating,
       houseType: offer.houseType,
       countRooms: offer.countRooms,
       countGuests: offer.countGuests,
       rentPrice: offer.rentPrice,
       amenities: offer.amenities,
-      countComments: offer.countComments,
       location: offer.location,
     });
   }

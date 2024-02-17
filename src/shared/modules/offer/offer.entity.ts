@@ -73,14 +73,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public favorites: boolean;
 
   @prop({
-    type: Number,
-    required: true,
-    min: [1, 'Minimum rating'],
-    max: [5, 'Maximum rating']
-  })
-  public rating: number;
-
-  @prop({
     type: () => String,
     required: true,
     enum: HOUSE_TYPE
@@ -117,12 +109,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     default: [],
   })
   public amenities: AmenitiesType[];
-
-  @prop({
-    type: Number,
-    default: 0
-  })
-  public countComments: number;
 
   @prop({
     required: true

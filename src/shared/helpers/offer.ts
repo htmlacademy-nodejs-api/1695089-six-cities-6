@@ -11,7 +11,6 @@ export function createOffer(offerData: string): Offer {
     photos,
     premium,
     favorites,
-    rating,
     houseType,
     countRooms,
     countGuests,
@@ -21,7 +20,6 @@ export function createOffer(offerData: string): Offer {
     email,
     avatarPath,
     status,
-    countComments,
     latitude,
     longitude
   ] = offerData.replace('\n', '').split('\t');
@@ -35,7 +33,6 @@ export function createOffer(offerData: string): Offer {
     photos: photos.split(';'),
     premium: JSON.parse(premium),
     favorites: JSON.parse(favorites),
-    rating: Number.parseFloat(rating),
     houseType: houseType as HouseType,
     countRooms: Number.parseInt(countRooms, 10),
     countGuests: Number.parseInt(countGuests, 10),
@@ -47,7 +44,6 @@ export function createOffer(offerData: string): Offer {
       avatarPath,
       status: status as UserStatusType
     },
-    countComments: Number.parseInt(countComments, 10),
     location: {
       latitude: Number.parseFloat(latitude),
       longitude: Number.parseFloat(longitude),
