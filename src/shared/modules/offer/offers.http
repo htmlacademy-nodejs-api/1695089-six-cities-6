@@ -1,0 +1,6 @@
+# OFFERS
+## Получить список offers
+GET http://localhost:3000/offers/ HTTP/1.1
+Content-Type: application/json
+
+###

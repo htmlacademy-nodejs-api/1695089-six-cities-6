@@ -6,6 +6,7 @@ import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoURI} from '../shared/helpers/index.js';
 import {OfferService} from '../shared/modules/offer/index.js';
 import express, {Express} from 'express';
+import {Controller} from '../shared/libs/rest/index.js';
 
 // import {CommentService} from '../shared/modules/comment/index.js';
 
@@ -18,6 +19,7 @@ export class RestApplication {
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.OfferController) private readonly offerController: Controller,
     // @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     this.server = express();
@@ -40,12 +42,20 @@ export class RestApplication {
     this.server.listen(port);
   }
 
+  private async _initControllers() {
+    this.server.use('/offers', this.offerController.router);
+  }
+
   public async init() {
     this.logger.info('Application initialization');
 
     this.logger.info('Init database...');
     await this.initDb();
     this.logger.info('Init database completed');
+
+    this.logger.info('Init controllers');
+    await this._initControllers();
+    this.logger.info('Controller initialization completed');
 
     this.logger.info('Try to init server…');
     await this._initServer();
