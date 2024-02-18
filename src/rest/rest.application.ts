@@ -6,7 +6,7 @@ import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoURI} from '../shared/helpers/index.js';
 import {OfferService} from '../shared/modules/offer/index.js';
 import express, {Express} from 'express';
-import {Controller} from '../shared/libs/rest/index.js';
+import {Controller, ExceptionFilter} from '../shared/libs/rest/index.js';
 
 // import {CommentService} from '../shared/modules/comment/index.js';
 
@@ -20,6 +20,7 @@ export class RestApplication {
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.OfferController) private readonly offerController: Controller,
+    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     // @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     this.server = express();
@@ -50,6 +51,10 @@ export class RestApplication {
     this.server.use(express.json());
   }
 
+  private async _initExceptionFilters() {
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
+  }
+
   public async init() {
     this.logger.info('Application initialization');
 
@@ -64,6 +69,10 @@ export class RestApplication {
     this.logger.info('Init controllers');
     await this._initControllers();
     this.logger.info('Controller initialization completed');
+
+    this.logger.info('Init exception filters');
+    await this._initExceptionFilters();
+    this.logger.info('Exception filters initialization completed');
 
     this.logger.info('Try to init server…');
     await this._initServer();
