@@ -1,5 +1,5 @@
 import {inject, injectable} from 'inversify';
-import {Response} from 'express';
+import {Response, Request} from 'express';
 import {BaseController, HttpError, HttpMethod} from '../../libs/rest/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {Component} from '../../types/index.js';
@@ -20,10 +20,12 @@ export class UserController extends BaseController {
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
   ) {
     super(logger);
-    this.logger.info('Register routes for UserController…');
+    this.logger.info('Register routes for UserController...');
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
+    this.addRoute({path: '/logout', method: HttpMethod.Post, handler: this.logout});
+    this.addRoute({path: '/check_auth', method: HttpMethod.Get, handler: this.checkAuth});
   }
 
   public async create(
@@ -64,5 +66,13 @@ export class UserController extends BaseController {
       'Not implemented',
       'UserController',
     );
+  }
+
+  public async logout(_req: Request, _res: Response): Promise<void> {
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
+  }
+
+  public async checkAuth(_req: Request, _res: Response): Promise<void> {
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
   }
 }
