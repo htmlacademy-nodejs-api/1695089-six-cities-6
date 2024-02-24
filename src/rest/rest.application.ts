@@ -8,7 +8,7 @@ import {OfferService} from '../shared/modules/offer/index.js';
 import express, {Express} from 'express';
 import {Controller, ExceptionFilter} from '../shared/libs/rest/index.js';
 
-// import {CommentService} from '../shared/modules/comment/index.js';
+import {CommentService} from '../shared/modules/comment/index.js';
 
 @injectable()
 export class RestApplication {
@@ -22,7 +22,7 @@ export class RestApplication {
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
-    // @inject(Component.CommentService) private readonly commentService: CommentService
+    @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     this.server = express();
   }
@@ -82,14 +82,18 @@ export class RestApplication {
 
     const offer = await this.offerService.findById('65cbd3f22bafc2e35c2fe2e7');
     // const comment = await this.commentService.create({
-    //   text: 'test comment 2',
-    //   rating: 2,
+    //   text: 'test comment 1',
+    //   rating: 1,
     //   offerId: '65cbd3f22bafc2e35c2fe2e7',
     //   userId: '65cbd3f22bafc2e35c2fe2e5'
     // });
 
     // this.logger.info(`comment: ${comment}`);
 
-    this.logger.info(`allOffers: ${offer}`);
+    this.logger.info(`offer: ${offer}`);
+
+    const comments = await this.commentService.findByOfferId('65cbd3f22bafc2e35c2fe2e7');
+
+    console.log('comments', comments);
   }
 }

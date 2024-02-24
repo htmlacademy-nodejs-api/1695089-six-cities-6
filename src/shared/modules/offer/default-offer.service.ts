@@ -27,41 +27,35 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    // return this.offerModel
-    //   .findById(offerId)
-    //   .populate(['userId'])
-    //   .exec();
-
-    const result = await this.offerModel.aggregate([
-      {
-        $match: { _id: new Types.ObjectId(offerId) }
-      },
-      {
-        $lookup: {
-          from: 'comments',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'comments',
+    const result = await this.offerModel
+      .aggregate([
+        {
+          $match: {_id: new Types.ObjectId(offerId)}
+        },
+        {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'offerId',
+            as: 'comments',
+          }
+        },
+        {
+          $addFields: {
+            commentCount: {$size: '$comments'},
+            totalRating: {$avg: '$comments.rating'},
+          }
+        },
+        {
+          $unset: 'comments'
         }
-      },
-      {
-        $addFields: {
-          commentCount: {$size: '$comments'},
-          totalRating: {$avg: '$comments.rating'},
-        }
-      },
-      {
-        $unset: 'comments'
-      }
-    ])
+      ])
       .exec();
-
 
     return result[0] ?? null;
   }
 
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    // return this.offerModel.find().populate(['userId']).exec();
     const limit = count ?? DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
       {
@@ -78,9 +72,9 @@ export class DefaultOfferService implements OfferService {
           totalRating: {$avg: '$comments.rating'},
         }
       },
-      { $unset: ['comments'] },
-      { $sort: { createdAt: SortType.Down } },
-      { $limit: limit },
+      {$unset: ['comments']},
+      {$sort: {createdAt: SortType.Down}},
+      {$limit: limit},
     ])
       .exec();
   }
@@ -121,7 +115,8 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, {
         '$inc': {
           commentCount: 1,
-        }}).exec();
+        }
+      }).exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {

@@ -32,14 +32,12 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   public rating: number;
 
   @prop({
-    type: String,
     ref: OfferEntity,
     required: true
   })
   public offerId: Ref<OfferEntity>;
 
   @prop({
-    type: String,
     required: true,
     ref: UserEntity
   })

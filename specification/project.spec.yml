@@ -497,7 +497,7 @@ components:
           type: string
           example: example-path-to-img.png
 
-        listImages:
+        photos:
           type: array
           example:
             - example-path-to-img.png,

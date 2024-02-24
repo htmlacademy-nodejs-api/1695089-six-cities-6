@@ -6,3 +6,5 @@ export * from './offer.container.js';
 export * from './offer.constants.js';
 export * from './offer.controller.js';
 export * from './rdo/offer.rdo.js';
+export * from './update-offer-request.type.js';
+export * from './create-offer-requset.type.js';
