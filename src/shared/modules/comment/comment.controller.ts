@@ -1,4 +1,4 @@
-import {BaseController, HttpError, HttpMethod} from '../../libs/rest/index.js';
+import {BaseController, HttpError, HttpMethod, RequestQuery} from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
@@ -8,6 +8,7 @@ import {OfferService} from '../offer/index.js';
 import {StatusCodes} from 'http-status-codes';
 import {CommentRdo} from './rdo/comment.rdo.js';
 import {fillDTO} from '../../helpers/index.js';
+import {ParamOfferId} from '../offer/types/param-offerid.type.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -21,9 +22,17 @@ export class CommentController extends BaseController {
     this.logger.info('Register routes for CommentsController...');
 
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: '/offer_id', method: HttpMethod.Get, handler: this.findByOfferId});
   }
 
-  public async create({body}: Request, res: Response): Promise<void> {
+  public async findByOfferId({params, query}: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
+    const { offerId } = params;
+    const { limit } = query;
+    const comments = await this.commentService.findByOfferId(offerId, !isNaN(Number(limit)) ? Number(limit) : undefined);
+    this.ok(res, fillDTO(CommentRdo, comments));
+  }
+
+  public async create({body}: Request, res: Response) {
 
     if (! await this.offerService.exists(body.offerId)) {
       throw new HttpError(

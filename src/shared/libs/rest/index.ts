@@ -6,4 +6,5 @@ export * from './types/http-method.enum.js';
 export * from './types/route.interface.js';
 export * from './types/request-body.type.js';
 export * from './types/request.params.types.js';
+export * from './types/request-query.type.js';
 export * from './errors/index.js';
