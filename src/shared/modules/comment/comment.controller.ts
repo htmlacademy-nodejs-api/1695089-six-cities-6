@@ -1,4 +1,10 @@
-import {BaseController, HttpError, HttpMethod, RequestQuery} from '../../libs/rest/index.js';
+import {
+  BaseController,
+  HttpError,
+  HttpMethod,
+  RequestQuery,
+  ValidateObjectIdMiddleware
+} from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
@@ -22,7 +28,12 @@ export class CommentController extends BaseController {
     this.logger.info('Register routes for CommentsController...');
 
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: '/offer_id', method: HttpMethod.Get, handler: this.findByOfferId});
+    this.addRoute({
+      path: '/offerId',
+      method: HttpMethod.Get,
+      handler: this.findByOfferId,
+      middlewares: [ new ValidateObjectIdMiddleware('offerId')]
+    });
   }
 
   public async findByOfferId({params, query}: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
