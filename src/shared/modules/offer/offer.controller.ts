@@ -6,9 +6,9 @@ import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './rdo/offer.rdo.js';
-import {UpdateOfferRequest} from './update-offer-request.type.js';
+import {UpdateOfferRequest} from './types/update-offer-request.type.js';
 import {StatusCodes} from 'http-status-codes';
-import {CreateOfferRequest} from './create-offer-requset.type.js';
+import {CreateOfferRequest} from './types/create-offer-requset.type.js';
 
 
 @injectable()
@@ -20,7 +20,7 @@ export class OfferController extends BaseController {
   ) {
     super(logger);
 
-    this.logger.info('Register routes for OfferController…');
+    this.logger.info('Register routes for OfferController...');
 
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
