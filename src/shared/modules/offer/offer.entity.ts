@@ -1,4 +1,4 @@
-import {defaultClasses, getModelForClass, modelOptions, prop, Ref} from '@typegoose/typegoose';
+import {defaultClasses, getModelForClass, modelOptions, prop, mongoose, Ref, Severity} from '@typegoose/typegoose';
 import {AmenitiesType, HOUSE_TYPE, HouseType, Location} from '../../types/index.js';
 import {UserEntity} from '../user/index.js';
 
@@ -11,6 +11,9 @@ export interface OfferEntity extends defaultClasses.Base {
   schemaOptions: {
     collection: 'offers',
     timestamps: true,
+  },
+  options: {
+    allowMixed: Severity.ALLOW
   }
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -35,7 +38,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({
     type: Date,
-    required: true
+    required: true,
+    default: Date.now,
   })
   public publicationDate: Date;
 
@@ -54,11 +58,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public imagePreview: string;
 
   @prop({
-    type: () => [String],
+    type: String,
     required: true,
-    default: []
+    default: [],
   })
-  public photos: string[];
+  public photos: mongoose.Types.Array<string>;
 
   @prop({
     type: Boolean,
@@ -68,7 +72,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({
     type: Boolean,
-    required: true
+    required: true,
+    default: false
   })
   public favorites: boolean;
 
@@ -104,11 +109,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public rentPrice: number;
 
   @prop({
-    type: () => [String],
+    type: String,
     required: true,
     default: [],
   })
-  public amenities: AmenitiesType[];
+  public amenities: mongoose.Types.Array<AmenitiesType>;
 
   @prop({
     required: true
@@ -116,7 +121,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public location: Location;
 
   @prop({
-    type: String,
     ref: UserEntity,
     required: true
   })

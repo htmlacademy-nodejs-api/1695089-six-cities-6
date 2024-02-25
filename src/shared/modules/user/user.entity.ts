@@ -13,19 +13,40 @@ export interface UserEntity extends defaultClasses.Base {
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({required: true})
+  @prop({
+    type: String,
+    required: true,
+    trim: true,
+    minlength: [1, 'Min length for name path is 1'],
+    maxlength: [15, 'Max length for name path is 15'],
+  })
   public username: string;
 
-  @prop({required: true, unique: true})
+  @prop({
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
+    match: [/^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Email is incorrect'],
+  })
   public email: string;
 
-  @prop({required: false, default: ''})
+  @prop({
+    type: String,
+    required: false,
+    trim: true,
+    match: [/\.(jpg|png)(\?.*)?$/i, 'The user`s image must include an extension .jpg or .png'],
+    default: '',
+  })
   public avatarPath?: string;
 
-  @prop({required: true})
+  @prop({
+    type: String,
+    required: true
+  })
   public status: UserStatusType;
 
-  @prop({required: true, default: ''})
+  @prop({required: true})
   private password?: string;
 
   constructor(userData: User) {

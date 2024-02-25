@@ -1,0 +1,74 @@
+# OFFERS
+## Получить список предложений
+GET http://localhost:5000/offers/ HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Добавить новое предложение
+POST http://localhost:5000/offers/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Luxury Apartment",
+  "description": "Spacious apartment with a great view",
+  "publicationDate": "",
+  "city": "Paris",
+  "imagePreview": "example-path.png",
+  "photos": [
+    "example-path-to-img.png,",
+    "example-path-to-img.png,",
+    "example-path-to-img.png,",
+    "example-path-to-img.png,",
+    "example-path-to-img.png,",
+    "example-path-to-img.png,"
+  ],
+  "premium": true,
+  "favorites": false,
+  "houseType": "room",
+  "countRooms": 3,
+  "countGuests": 4,
+  "rentPrice": 50555,
+  "amenities": [
+    "Breakfast",
+    "Air conditioning",
+    "Laptop friendly workspace",
+    "Baby seat",
+    "Washer",
+    "Towels",
+    "Fridge"
+  ],
+  "userId": "65cbd3f22bafc2e35c2fe2e5",
+  "location": {
+    "latitude": 48.85661,
+    "longitude": 2.351499
+  }
+}
+
+###
+
+## Детальная информация по предложению.
+
+GET  http://localhost:5000/offers/65cbd3f22bafc2e35c2fe2e7/ HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Удалить предложение.
+
+DELETE  http://localhost:5000/offers/65cbd3f22bafc2e35c2fe2e7/ HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Редактирование предложения
+
+PUT  http://localhost:5000/offers/65cbd3f22bafc2e35c2fe2e7/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Luxury Apartment",
+  "userId": "65cbd3f22bafc2e35c2fe2e5"
+}
+
+###
