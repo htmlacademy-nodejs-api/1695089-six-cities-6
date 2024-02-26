@@ -2,7 +2,7 @@ import {
   BaseController,
   HttpError,
   HttpMethod,
-  RequestQuery,
+  RequestQuery, ValidateDtoMiddleware,
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
@@ -15,6 +15,7 @@ import {StatusCodes} from 'http-status-codes';
 import {CommentRdo} from './rdo/comment.rdo.js';
 import {fillDTO} from '../../helpers/index.js';
 import {ParamOfferId} from '../offer/types/param-offerid.type.js';
+import {CreateCommentDto} from './dto/create-comment.dto.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -27,12 +28,17 @@ export class CommentController extends BaseController {
 
     this.logger.info('Register routes for CommentsController...');
 
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)]
+    });
     this.addRoute({
       path: '/offerId',
       method: HttpMethod.Get,
       handler: this.findByOfferId,
-      middlewares: [ new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
     });
   }
 
