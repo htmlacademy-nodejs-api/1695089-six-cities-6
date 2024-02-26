@@ -1,5 +1,5 @@
 import {
-  BaseController,
+  BaseController, DocumentExistsMiddleware,
   HttpError,
   HttpMethod,
   ValidateDtoMiddleware,
@@ -43,20 +43,27 @@ export class OfferController extends BaseController {
       handler: this.update,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ]
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+      ]
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
       handler: this.indexId,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+      ]
     });
   }
 

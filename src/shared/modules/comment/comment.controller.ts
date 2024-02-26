@@ -1,5 +1,5 @@
 import {
-  BaseController,
+  BaseController, DocumentExistsMiddleware,
   HttpError,
   HttpMethod,
   RequestQuery, ValidateDtoMiddleware,
@@ -38,7 +38,10 @@ export class CommentController extends BaseController {
       path: '/offerId',
       method: HttpMethod.Get,
       handler: this.findByOfferId,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'id'),
+      ]
     });
   }
 
