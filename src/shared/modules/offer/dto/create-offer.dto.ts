@@ -17,7 +17,7 @@ import {
   ValidateNested
 } from 'class-validator';
 import {CreateOfferValidationMessage} from './create-offer.messages.js';
-import {CITIES} from '../../../types/city.type.js';
+import {CITIES, CityType} from '../../../types/city.type.js';
 
 export class CreateOfferDto {
   @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
@@ -38,7 +38,7 @@ export class CreateOfferDto {
       message: CreateOfferValidationMessage.city.invalidFormat,
     },
   )
-  public city: string;
+  public city: CityType;
 
   @IsUrl(
     {},

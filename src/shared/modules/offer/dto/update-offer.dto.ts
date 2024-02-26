@@ -15,7 +15,7 @@ import {
   MinLength,
   ValidateNested
 } from 'class-validator';
-import {CITIES} from '../../../types/city.type.js';
+import {CITIES, CityType} from '../../../types/city.type.js';
 import {UpdateOfferValidationMessage} from './update-offer.messages.js';
 
 export class UpdateOfferDto {
@@ -36,7 +36,7 @@ export class UpdateOfferDto {
       message: UpdateOfferValidationMessage.city.invalidFormat,
     },
   )
-  public city?: string;
+  public city?: CityType;
 
   @IsOptional()
   @IsUrl(
