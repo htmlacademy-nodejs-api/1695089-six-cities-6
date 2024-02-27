@@ -4,11 +4,9 @@ import {injectable, inject} from 'inversify';
 import {Component} from '../shared/types/index.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoURI} from '../shared/helpers/index.js';
-import {OfferService} from '../shared/modules/offer/index.js';
 import express, {Express} from 'express';
 import {Controller, ExceptionFilter} from '../shared/libs/rest/index.js';
 
-import {CommentService} from '../shared/modules/comment/index.js';
 
 @injectable()
 export class RestApplication {
@@ -18,11 +16,10 @@ export class RestApplication {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
-    @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.OfferController) private readonly offerController: Controller,
-    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
-    @inject(Component.CommentService) private readonly commentService: CommentService
+    @inject(Component.CommentController) private readonly commentController: Controller,
+    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
   }
@@ -47,6 +44,7 @@ export class RestApplication {
   private async _initControllers() {
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.userController.router);
+    this.server.use('/comments', this.commentController.router);
   }
 
   private async _initMiddleware() {
@@ -76,24 +74,8 @@ export class RestApplication {
     await this._initExceptionFilters();
     this.logger.info('Exception filters initialization completed');
 
-    this.logger.info('Try to init server…');
+    this.logger.info('Try to init server...');
     await this._initServer();
-    this.logger.info(`🚀 Server started on http://localhost:${this.config.get('PORT')}`);
-
-    const offer = await this.offerService.findById('65cbd3f22bafc2e35c2fe2e7');
-    // const comment = await this.commentService.create({
-    //   text: 'test comment 1',
-    //   rating: 1,
-    //   offerId: '65cbd3f22bafc2e35c2fe2e7',
-    //   userId: '65cbd3f22bafc2e35c2fe2e5'
-    // });
-
-    // this.logger.info(`comment: ${comment}`);
-
-    this.logger.info(`offer: ${offer}`);
-
-    const comments = await this.commentService.findByOfferId('65cbd3f22bafc2e35c2fe2e7');
-
-    console.log('comments', comments);
+    this.logger.info(`Server started on http://localhost:${this.config.get('PORT')}`);
   }
 }

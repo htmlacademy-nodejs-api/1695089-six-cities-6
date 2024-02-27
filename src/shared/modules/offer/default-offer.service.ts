@@ -8,6 +8,9 @@ import {Logger} from '../../libs/logger/index.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
 import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './offer.constants.js';
 import {Types} from 'mongoose';
+import {UserEntity} from '../user/index.js';
+import {HttpError} from '../../libs/rest/index.js';
+import {StatusCodes} from 'http-status-codes';
 
 
 @injectable()
@@ -15,7 +18,8 @@ export class DefaultOfferService implements OfferService {
 
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
+    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {
   }
 
@@ -108,6 +112,29 @@ export class DefaultOfferService implements OfferService {
       .sort({createdAt: SortType.Down})
       .populate(['userId'])
       .exec();
+  }
+
+  public async toggleFavorite(userId: string, offerId: string): Promise<boolean> {
+    const user = await this.userModel.findById(userId).exec();
+
+    if (!user) {
+      throw new HttpError(StatusCodes.NOT_FOUND, `User with id ${userId} not found.`);
+    }
+    const offerObjectId = new Types.ObjectId(offerId);
+    const isFavorite = user.favoriteOffers.includes(offerObjectId);
+
+    if (isFavorite) {
+      user.favoriteOffers.pull(offerObjectId);
+
+      await user.save();
+      return false;
+    } else {
+      user.favoriteOffers.push(offerObjectId);
+
+      await user.save();
+
+      return true;
+    }
   }
 
   public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
