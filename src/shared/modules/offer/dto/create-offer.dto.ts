@@ -6,7 +6,6 @@ import {
   IsDateString,
   IsIn,
   IsInt,
-  IsMongoId,
   IsOptional,
   IsUrl,
   Matches,
@@ -97,7 +96,6 @@ export class CreateOfferDto {
   )
   public amenities: AmenitiesType[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId })
   public userId: string;
 
   @ValidateNested()
