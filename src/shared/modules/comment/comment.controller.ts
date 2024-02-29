@@ -52,7 +52,7 @@ export class CommentController extends BaseController {
     this.ok(res, fillDTO(CommentRdo, comments));
   }
 
-  public async create({body}: Request, res: Response) {
+  public async create({body, tokenPayload }: Request, res: Response) {
 
     if (! await this.offerService.exists(body.offerId)) {
       throw new HttpError(
@@ -62,7 +62,7 @@ export class CommentController extends BaseController {
       );
     }
 
-    const comment = this.commentService.create(body);
+    const comment = this.commentService.create({...body, userId: tokenPayload.id});
     await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRdo, comment));
   }
