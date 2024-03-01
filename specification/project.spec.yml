@@ -616,11 +616,11 @@ components:
             - example-path-to-img.png,
             - example-path-to-img.png,
 
-        isPremium:
+        premium:
           type: boolean
           example: false
 
-        isFavorite:
+        favorites:
           type: boolean
           example: false
 
@@ -637,15 +637,15 @@ components:
             - room
             - hotel
 
-        rooms:
+        countRooms:
           type: number
           example: 3
 
-        guests:
+        countGuests:
           type: number
           example: 4
 
-        rentalCost:
+        rentPrice:
           type: number
           example: 5432
 

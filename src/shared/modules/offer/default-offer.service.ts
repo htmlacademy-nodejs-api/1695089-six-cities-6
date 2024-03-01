@@ -6,11 +6,11 @@ import {inject, injectable} from 'inversify';
 import {Component, SortType} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
-import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './offer.constants.js';
 import {Types} from 'mongoose';
 import {UserEntity} from '../user/index.js';
 import {HttpError} from '../../libs/rest/index.js';
 import {StatusCodes} from 'http-status-codes';
+import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './constants/index.js';
 
 
 @injectable()

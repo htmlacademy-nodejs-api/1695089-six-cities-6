@@ -5,7 +5,7 @@ import {CommentEntity} from './comment.entity.js';
 import {inject, injectable} from 'inversify';
 import {Component, SortType} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
-import {DEFAULT_COMMENT_COUNT} from './comment.constants.js';
+import {DEFAULT_COMMENT_COUNT} from './constants/index.js';
 
 
 @injectable()
@@ -21,7 +21,7 @@ export class DefaultCommentService implements CommentService {
     const comment = await this.commentModel.create(dto);
     this.logger.info(`New comment created:${dto.text}`);
 
-    return comment;
+    return comment.populate('userId');
   }
 
   public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<CommentEntity>[]> {

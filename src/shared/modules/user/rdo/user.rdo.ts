@@ -9,11 +9,12 @@ export class UserRdo {
   public email: string ;
 
   @Expose()
+  public username: string;
+
+  @Expose()
   public avatarPath: string;
 
   @Expose()
   public status: UserStatusType;
 
-  @Expose()
-  public username: string;
 }

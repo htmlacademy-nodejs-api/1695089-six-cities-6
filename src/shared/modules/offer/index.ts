@@ -7,7 +7,6 @@ export * from './dto/create-offer.messages.js';
 export * from './rdo/offer.rdo.js';
 export * from './offer.entity.js';
 export * from './offer.container.js';
-export * from './offer.constants.js';
 export * from './offer.controller.js';
 export * from './types/update-offer-request.type.js';
 export * from './types/create-offer-requset.type.js';
