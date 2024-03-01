@@ -8,7 +8,6 @@ Content-Type: application/json
 {
   "email": "zholud@gmail.com",
   "username": "Artem Zholud",
-  "avatarPath": "example2.png",
   "status": "pro",
   "password": "123456789"
 }

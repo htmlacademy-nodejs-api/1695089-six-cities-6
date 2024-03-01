@@ -8,6 +8,10 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
 
+servers:
+  - url: 'http://localhost:5000'
+    description: 'Local server'
+
 tags:
   - name: comments
     description: Действия с комментариями
@@ -107,16 +111,12 @@ paths:
             type: string
 
       responses:
-        '201':
+        200:
           description: Cервис завершает пользовательский сеанс (сессию).
-          content:
-            application/json:
-              schema:
-                type: object
-        '401':
+        401:
           description: Срок действия токена истек
 
-#OFFERS
+  #OFFERS
   /offers/:
     get:
       tags:
@@ -143,12 +143,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/offer'
-
+        404:
+          description: Не найдено подходящих предложений
     post:
       tags:
         - offers
       summary: Создание нового предложения
-      description:  Создавать предложения могут только авторизованные клиенты.
+      description: Создавать предложения могут только авторизованные клиенты.
         В случае успешного создания предложения сервис в ответе возвращает информацию о созданном предложении (объект предложения).
       parameters:
         - name: token
@@ -176,12 +177,12 @@ paths:
         401:
           description: Срок действия токена истек.
 
-  /offers/{offer_id}/:
+  /offers/{offerId}/:
     get:
       tags:
         - offers
       summary: Детальная информация по предложению.
-      description:  Детальная информация по предложению включает сведения о количестве комментариев. Сами комментарии не включены.
+      description: Детальная информация по предложению включает сведения о количестве комментариев. Сами комментарии не включены.
         Детальную информацию по предложению могут запрашивать авторизованные и анонимные клиенты.
 
       responses:
@@ -307,7 +308,7 @@ paths:
         401:
           description: Срок действия токена истек.
 
-  /offers/{offer_id}/favorite/:
+  /offers/{offerId}/favorite/:
     put:
       tags:
         - offers
@@ -345,8 +346,8 @@ paths:
         401:
           description: Срок действия токена истекы
 
-# COMMENTS
-  /comments/{offer_id}/:
+  # COMMENTS
+  /comments/{offerId}/:
     get:
       tags:
         - comments
@@ -355,6 +356,12 @@ paths:
         Сервис всегда возвращает список из 50 (или меньше) последних комментариев.
         Комментарии отсортированы по дате публикации (по убыванию). Сначала новые, потом старые.
         Комментарии могут запрашивать авторизованные и анонимные клиенты.
+      parameters:
+        - name: limit
+          in: query
+          description: limit
+          schema:
+            type: number
 
       responses:
         200:
@@ -387,7 +394,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/comment'
+              $ref: '#/components/schemas/createComment'
         required: true
 
       responses:
@@ -463,7 +470,7 @@ components:
           type: string
           example: tokenAuthorization
 
-#OFFERS
+    #OFFERS
 
     offer:
       type: object
@@ -669,20 +676,40 @@ components:
           type: string
           example: 1231234sdfzxfgwer123fg34
 
-#COMMENTS
+    #COMMENTS
 
     comment:
       type: object
 
       properties:
-        description:
+        text:
           type: string
-          example: description
+          example: Текст комментария
 
         rating:
           type: number
           example: 3.5
 
+        offerId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
         userId:
           type: string
           example: 1231234sdfzxfgwer123fg34
+
+    createComment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Новый комментарий
+
+        rating:
+          type: number
+          example: 2
+
+        offerId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea

@@ -1,5 +1,6 @@
 import {IsEmail, IsString, Length} from 'class-validator';
 import {LoginUserMessage} from './login-user.messages.js';
+import {UserPasswordLength} from '../constants/index.js';
 
 
 export class LoginUserDto {
@@ -7,6 +8,6 @@ export class LoginUserDto {
   public email: string;
 
   @IsString({ message: LoginUserMessage.password.invalidFormat })
-  @Length(6, 12, { message: LoginUserMessage.password.lengthField })
+  @Length(UserPasswordLength.Min, UserPasswordLength.Max, { message: LoginUserMessage.password.lengthField })
   public password: string;
 }

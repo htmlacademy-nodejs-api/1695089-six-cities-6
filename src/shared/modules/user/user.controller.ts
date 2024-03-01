@@ -3,24 +3,26 @@ import {Response, Request} from 'express';
 import {
   BaseController,
   HttpError,
-  HttpMethod, UploadFileMiddleware,
+  HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {Component} from '../../types/index.js';
-import {CreateUserRequest} from './create-user-request.type.js';
+import {CreateUserRequest} from './types/create-user-request.type.js';
 import {RestSchema} from '../../libs/config/index.js';
 import {Config} from 'convict';
 import {UserService} from './user-service.interface.js';
 import {StatusCodes} from 'http-status-codes';
 import {fillDTO} from '../../helpers/index.js';
 import {UserRdo} from './rdo/user.rdo.js';
-import {LoginUserRequest} from './login-user-request.type.js';
+import {LoginUserRequest} from './types/login-user-request.type.js';
 import {CreateUserDto} from './dto/create-user.dto.js';
 import {LoginUserDto} from './dto/login-user.dto.js';
 import {AuthService} from '../auth/index.js';
 import {LoggedUserRdo} from './rdo/logged-user.rdo.js';
+import {PathUser} from './constants/index.js';
+import {UploadUserAvatarRdo} from './rdo/upload-user-avatart.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -34,32 +36,28 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController...');
 
     this.addRoute({
-      path: '/register',
+      path: PathUser.Register,
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
     this.addRoute({
-      path: '/login',
+      path: PathUser.Login,
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
     this.addRoute({
-      path: '/logout',
-      method: HttpMethod.Post,
-      handler: this.logout
-    });
-    this.addRoute({
-      path: '/login',
+      path: PathUser.Login,
       method: HttpMethod.Get,
       handler: this.checkAuth
     });
     this.addRoute({
-      path: '/:userId/avatar',
+      path: PathUser.AddAvatar,
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ],
@@ -91,21 +89,14 @@ export class UserController extends BaseController {
   ): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
-      token,
-    });
-    this.ok(res, responseData);
+    const responseData = fillDTO(LoggedUserRdo, user);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
-  public async logout(_req: Request, _res: Response): Promise<void> {
-    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
-  }
-
-  public async checkAuth({ tokenPayload: { email }}: Request, res: Response) {
+  public async checkAuth({tokenPayload: {email}}: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(email);
 
-    if (! foundedUser) {
+    if (!foundedUser) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
         'Unauthorized',
@@ -116,9 +107,10 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path,
-    });
+  public async uploadAvatar({params, file}: Request, res: Response) {
+    const {id} = params;
+    const uploadFile = {avatarPath: file?.filename};
+    await this.userService.updateById(id, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, {filepath: uploadFile.avatarPath}));
   }
 }

@@ -16,7 +16,6 @@ export class DefaultAuthService implements AuthService {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
-
   ) {
   }
 
