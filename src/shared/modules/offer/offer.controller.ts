@@ -17,6 +17,7 @@ import {StatusCodes} from 'http-status-codes';
 import {CreateOfferRequest} from './types/create-offer-requset.type.js';
 import {CreateOfferDto} from './dto/create-offer.dto.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
+import {ParamOfferId} from './types/param-offerid.type.js';
 
 
 @injectable()
@@ -48,7 +49,7 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
       ]
     });
     this.addRoute({
@@ -57,16 +58,16 @@ export class OfferController extends BaseController {
       handler: this.delete,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
       ]
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
-      handler: this.indexId,
+      handler: this.show,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
       ]
     });
   }
@@ -105,17 +106,10 @@ export class OfferController extends BaseController {
     this.noContent(res, existsOffer);
   }
 
-  public async indexId({params}: Request, res: Response): Promise<void> {
-    const existsOffer = await this.offerService.findById(params.offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offerId}» not found.`,
-        'OfferController',
-      );
-    }
-
-    this.ok(res, fillDTO(OfferRdo, existsOffer));
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const userId = tokenPayload?.id;
+    const offer = await this.offerService.findById(offerId, userId);
+    this.ok(res, fillDTO(OfferRdo, offer));
   }
 }

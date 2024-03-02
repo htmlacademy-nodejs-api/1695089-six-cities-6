@@ -1,11 +1,19 @@
+import {
+  CountGuests,
+  CountRooms,
+  MIN_COUNT_PHOTOS,
+  OfferDescriptionLength,
+  OfferTitleLength, RentPrice
+} from '../constants/index.js';
+
 export const CreateOfferValidationMessage = {
   title: {
-    minLength: 'Min length for title path is 10',
-    maxLength: 'Max length for title path is 100',
+    minLength: `Min length for title path is ${OfferTitleLength.Min}`,
+    maxLength: `Max length for title path is ${OfferTitleLength.Max}`,
   },
   description: {
-    minLength: 'Min length for description path is 20',
-    maxLength: 'Max length for description path is 1024',
+    minLength: `Min length for description path is ${OfferDescriptionLength.Min}`,
+    maxLength: `Max length for description path is ${OfferDescriptionLength.Max}`,
   },
   publicationDate: {
     invalidFormat: 'publicationDate must be a valid ISO date',
@@ -19,8 +27,8 @@ export const CreateOfferValidationMessage = {
   },
   photos: {
     invalidFormat: 'Photos must be an array',
-    ArrayMinSize: 'Photos must contain exactly 6 images',
-    ArrayMaxSize: 'Photos must contain exactly 6 images',
+    ArrayMinSize: `Photos must contain exactly ${MIN_COUNT_PHOTOS} images`,
+    ArrayMaxSize: `Photos must contain exactly ${MIN_COUNT_PHOTOS} images`,
   },
   isPremium: {
     invalidFormat: 'isPremium must be an boolean',
@@ -30,18 +38,18 @@ export const CreateOfferValidationMessage = {
   },
   countRooms: {
     invalidFormat: 'countRooms must be an integer',
-    minValue: 'Min length for countRooms path is 1',
-    maxValue: 'Max length for countRooms path is 8',
+    minValue: `Min length for countRooms path is ${CountRooms.Min}`,
+    maxValue: `Max length for countRooms path is ${CountRooms.Max}`,
   },
   countGuests: {
     invalidFormat: 'countGuests must be an integer',
-    minValue: 'Min length for countGuests path is 1',
-    maxValue: 'Max length for countGuests path is 10',
+    minValue: `Min length for countGuests path is ${CountGuests.Min}`,
+    maxValue: `Max length for countGuests path is ${CountGuests.Max}`,
   },
   rentPrice: {
     invalidFormat: 'rentPrice must be an integer',
-    minValue: 'Min length for rentPrice path is 100',
-    maxValue: 'Max length for rentPrice path is 100000',
+    minValue: `Min length for rentPrice path is ${RentPrice.Min}`,
+    maxValue: `Max length for rentPrice path is ${RentPrice.Max}`,
   },
   amenities: {
     invalidFormat: 'Field amenities must be an array and type must be Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels or Fridge',
