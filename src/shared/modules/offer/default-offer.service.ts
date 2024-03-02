@@ -62,25 +62,6 @@ export class DefaultOfferService implements OfferService {
     }
   ];
 
-  private usersLookup = [
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'userId',
-        foreignField: '_id',
-        as: 'user',
-      },
-    },
-    {
-      $unwind: '$user',
-    },
-    {
-      $set: {
-        'user.id': '$user._id',
-      },
-    }
-  ];
-
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.title}`);
@@ -114,7 +95,15 @@ export class DefaultOfferService implements OfferService {
     const limit = count ?? DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
       ...this.commentsLookup,
-      ...this.usersLookup,
+      {
+        $set: {
+          location: {
+            latitude: '$location.latitude',
+            longitude: '$location.longitude'
+          }
+        }
+      },
+      ...this.authorPipeline,
       {$sort: {createdAt: SortType.Down}},
       {$limit: limit},
     ])
