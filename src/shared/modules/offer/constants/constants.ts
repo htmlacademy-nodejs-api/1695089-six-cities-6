@@ -27,3 +27,15 @@ export const RentPrice = {
   Min: 100,
   Max: 100000
 } as const;
+
+export const PathOffer = {
+  Index: '/',
+  Premium: '/premium',
+  Favorites: '/favorites',
+  toggleFavorites: '/:offerId/favorites',
+  Create: '/',
+  Update: '/:offerId',
+  Delete: '/:offerId',
+  Show: '/:offerId',
+  AddAvatar: '/:userId/avatar'
+} as const;

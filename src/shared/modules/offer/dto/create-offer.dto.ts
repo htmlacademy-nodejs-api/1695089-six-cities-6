@@ -1,10 +1,10 @@
-import {Amenities, PropertyType, Location, City} from '../../../types/index.js';
+import {Amenities, PropertyType, City} from '../../../types/index.js';
 import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray, IsBoolean,
   IsDateString, IsEnum,
-  IsInt,
+  IsInt, IsLatitude, IsLongitude,
   IsOptional,
   IsUrl,
   Matches,
@@ -24,6 +24,13 @@ import {
   RentPrice
 } from '../constants/index.js';
 
+export class LocationDto {
+  @IsLatitude()
+  public latitude: number;
+
+  @IsLongitude()
+  public longitude: number;
+}
 export class CreateOfferDto {
   @MinLength(OfferTitleLength.Min, {message: CreateOfferValidationMessage.title.minLength})
   @MaxLength(OfferTitleLength.Max, {message: CreateOfferValidationMessage.title.maxLength})
@@ -88,7 +95,9 @@ export class CreateOfferDto {
   public amenities: Amenities[];
 
   @ValidateNested()
-  public location: Location;
+  public location: LocationDto;
 
   public userId: string;
 }
+
+
