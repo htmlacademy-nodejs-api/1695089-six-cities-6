@@ -5,6 +5,7 @@ import {Component} from '../shared/types/index.js';
 import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getFullServerPath, getMongoURI} from '../shared/helpers/index.js';
 import express, {Express} from 'express';
+import cors from 'cors';
 import {Controller, ExceptionFilter, ParseTokenMiddleware} from '../shared/libs/rest/index.js';
 import {STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE} from './rest.constant.js';
 
@@ -63,6 +64,7 @@ export class RestApplication {
       express.static(this.config.get('STATIC_DIRECTORY_PATH'))
     );
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.server.use(cors());
   }
 
   private async _initExceptionFilters() {
