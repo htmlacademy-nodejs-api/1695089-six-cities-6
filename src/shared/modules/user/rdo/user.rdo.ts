@@ -3,7 +3,13 @@ import {UserStatusType} from '../../../types/index.js';
 
 export class UserRdo {
   @Expose()
+  public id: string;
+
+  @Expose()
   public email: string ;
+
+  @Expose()
+  public username: string;
 
   @Expose()
   public avatarPath: string;
@@ -11,6 +17,4 @@ export class UserRdo {
   @Expose()
   public status: UserStatusType;
 
-  @Expose()
-  public username: string;
 }

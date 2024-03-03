@@ -2,6 +2,7 @@ import {User, UserStatusType} from '../../types/index.js';
 import {getModelForClass, prop, defaultClasses, modelOptions} from '@typegoose/typegoose';
 import {createSHA256} from '../../helpers/index.js';
 import {Types} from 'mongoose';
+import {UserNameLength} from './constants/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {
@@ -19,8 +20,8 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     type: String,
     required: true,
     trim: true,
-    minlength: [1, 'Min length for name path is 1'],
-    maxlength: [15, 'Max length for name path is 15'],
+    minlength: [UserNameLength.Min, `Min length for name path is ${UserNameLength.Min}`],
+    maxlength: [UserNameLength.Max, `Max length for name path is ${UserNameLength.Max}`],
   })
   public username: string;
 
@@ -37,8 +38,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     type: String,
     required: false,
     trim: true,
-    match: [/\.(jpg|png)(\?.*)?$/i, 'The user`s image must include an extension .jpg or .png'],
-    default: '',
   })
   public avatarPath?: string;
 
@@ -72,6 +71,11 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
 
   public getPassword() {
     return this.password;
+  }
+
+  public verifyPassword(password: string, salt: string) {
+    const hashPassword = createSHA256(password, salt);
+    return hashPassword === this.password;
   }
 }
 

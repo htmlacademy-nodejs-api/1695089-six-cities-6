@@ -3,9 +3,8 @@ import {TSVFileReader} from '../../shared/libs/file-reader/index.js';
 import {createOffer, getErrorMessage, getMongoURI} from '../../shared/helpers/index.js';
 import {DatabaseClient, MongoDatabaseClient} from '../../shared/libs/database-client/index.js';
 import {DefaultOfferService, OfferModel, OfferService} from '../../shared/modules/offer/index.js';
-import {UserService} from '../../shared/modules/user/user-service.interface.js';
 import {ConsoleLogger, Logger} from '../../shared/libs/logger/index.js';
-import {DefaultUserService, UserModel} from '../../shared/modules/user/index.js';
+import {DefaultUserService, UserModel, UserService} from '../../shared/modules/user/index.js';
 import {Offer} from '../../shared/types/index.js';
 import {DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD} from './command.constants.js';
 
@@ -23,7 +22,7 @@ export class ImportCommand implements Command {
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
-    this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.offerService = new DefaultOfferService(this.logger, UserModel, OfferModel);
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
@@ -60,7 +59,6 @@ export class ImportCommand implements Command {
       imagePreview: offer.imagePreview,
       photos: offer.photos,
       premium: offer.premium,
-      favorites: offer.favorites,
       houseType: offer.houseType,
       countRooms: offer.countRooms,
       countGuests: offer.countGuests,

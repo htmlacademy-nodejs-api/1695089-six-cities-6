@@ -1,6 +1,8 @@
 import {defaultClasses, getModelForClass, modelOptions, prop, Ref} from '@typegoose/typegoose';
 import {UserEntity} from '../user/index.js';
 import {OfferEntity} from '../offer/index.js';
+import {Rating, TextLengthComment} from './constants/index.js';
+
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface CommentEntity extends defaultClasses.Base{}
@@ -17,8 +19,8 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({
     type: String,
     required: true,
-    minlength: [5, 'Minimum title length 5 characters'],
-    maxlength: [1024, 'Minimum title length 1024 characters'],
+    minlength: [TextLengthComment.Min, `Minimum text length ${TextLengthComment.Min} characters`],
+    maxlength: [TextLengthComment.Max, `Minimum text length ${TextLengthComment.Max} characters`],
     trim: true
   })
   public text: string;
@@ -26,8 +28,8 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({
     type: Number,
     required: true,
-    min: [1, 'Minimum rating'],
-    max: [5, 'Maximum rating']
+    min: [Rating.Min, `Minimum ${Rating.Min} rating`],
+    max: [Rating.Max, `Maximum ${Rating.Max} rating`]
   })
   public rating: number;
 

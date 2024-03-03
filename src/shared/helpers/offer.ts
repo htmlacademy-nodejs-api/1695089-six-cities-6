@@ -1,4 +1,4 @@
-import {AmenitiesType, HouseType, Offer, UserStatusType} from '../types/index.js';
+import {Amenities, PropertyType, Offer, UserStatusType, City} from '../types/index.js';
 
 export function createOffer(offerData: string): Offer {
 
@@ -28,16 +28,16 @@ export function createOffer(offerData: string): Offer {
     title,
     description,
     publicationDate: new Date(publicationDate),
-    city,
+    city: city as City,
     imagePreview,
     photos: photos.split(';'),
     premium: JSON.parse(premium),
     favorites: JSON.parse(favorites),
-    houseType: houseType as HouseType,
+    houseType: houseType as PropertyType,
     countRooms: Number.parseInt(countRooms, 10),
     countGuests: Number.parseInt(countGuests, 10),
     rentPrice: Number.parseInt(rentPrice, 10),
-    amenities: amenities.split(';') as AmenitiesType[],
+    amenities: amenities.split(';') as Amenities[],
     user: {
       username,
       email,

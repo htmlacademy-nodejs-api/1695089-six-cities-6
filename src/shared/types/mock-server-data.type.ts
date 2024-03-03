@@ -1,22 +1,23 @@
-import {HouseType} from './house.type.js';
-import {AmenitiesType} from './amenities.type.js';
+import {PropertyType} from './property-type.enum.js';
+import {Amenities} from './amenities.enum.js';
 import {UserStatusType} from './user-status.type.js';
+import {City} from './city.enum.js';
 
 export type MockServerData = {
   titles: string[];
   descriptions: string[];
   publicationDates: string[];
-  cities: string[];
+  cities: City[];
   imagePreviews: string[];
   photos: string[][];
   premium: boolean[];
   favorites: boolean[];
   ratings: number[];
-  houseTypes: HouseType[];
+  houseTypes: PropertyType[];
   countRooms: number[];
   countGuests: number[];
   rentPrices: number[];
-  amenities: AmenitiesType[];
+  amenities: Amenities[];
   usernames: string[];
   emails: string[];
   avatarPaths: string[];

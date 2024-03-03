@@ -1,6 +1,10 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
+import {Amenities, City, Location, PropertyType} from '../../../types/index.js';
+import {UserRdo} from '../../user/index.js';
 
 export class OfferRdo {
+  @Expose()
+  public id: string;
 
   @Expose()
   public title: string;
@@ -9,47 +13,48 @@ export class OfferRdo {
   public description: string;
 
   @Expose()
-  public publicationDate: string;
+  public publicationDate: Date;
 
   @Expose()
-  public city: string;
+  public city: City;
 
   @Expose()
   public imagePreview: string;
 
   @Expose()
-  public photos: string;
+  public photos: string[];
 
   @Expose()
-  public premium: string;
+  public premium: boolean;
 
   @Expose()
-  public favorites: string;
+  public favorites: boolean;
 
   @Expose()
-  public houseType: string;
+  public houseType: PropertyType;
 
   @Expose()
-  public countRooms: string;
+  public countRooms: number;
 
   @Expose()
-  public countGuests: string;
+  public countGuests: number;
 
   @Expose()
-  public rentPrice: string;
+  public rentPrice: number;
 
   @Expose()
-  public amenities: string;
+  public amenities: Amenities[];
 
   @Expose()
-  public totalRating: string;
+  public rating: number;
 
   @Expose()
-  public commentCount: string;
+  public commentCount: number;
 
   @Expose()
-  public location: string;
+  public location: Location;
 
   @Expose()
-  public userId: string;
+  @Type(() => UserRdo)
+  public user: UserRdo;
 }

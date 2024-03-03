@@ -1,10 +1,9 @@
-import {AMENITIES, AmenitiesType, HOUSE_TYPE, HouseType, Location} from '../../../types/index.js';
+import {Amenities, PropertyType, Location, City} from '../../../types/index.js';
 import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
-  IsBoolean,
-  IsIn,
+  IsBoolean, IsEnum,
   IsInt,
   IsOptional,
   IsUrl,
@@ -15,28 +14,33 @@ import {
   MinLength,
   ValidateNested
 } from 'class-validator';
-import {CITIES, CityType} from '../../../types/city.type.js';
 import {UpdateOfferValidationMessage} from './update-offer.messages.js';
+import {
+  CountGuests,
+  CountRooms,
+  MIN_COUNT_PHOTOS,
+  OfferDescriptionLength,
+  OfferTitleLength, RentPrice
+} from '../constants/index.js';
 
 export class UpdateOfferDto {
   @IsOptional()
-  @MinLength(10, {message: UpdateOfferValidationMessage.title.minLength})
-  @MaxLength(100, {message: UpdateOfferValidationMessage.title.maxLength})
+  @MinLength(OfferTitleLength.Min, {message: UpdateOfferValidationMessage.title.minLength})
+  @MaxLength(OfferTitleLength.Max, {message: UpdateOfferValidationMessage.title.maxLength})
   public title?: string;
 
   @IsOptional()
-  @MinLength(20, {message: UpdateOfferValidationMessage.description.minLength})
-  @MaxLength(1024, {message: UpdateOfferValidationMessage.description.maxLength})
+  @MinLength(OfferDescriptionLength.Min, {message: UpdateOfferValidationMessage.description.minLength})
+  @MaxLength(OfferDescriptionLength.Max, {message: UpdateOfferValidationMessage.description.maxLength})
   public description?: string;
 
   @IsOptional()
-  @IsIn(
-    [CITIES.Paris, CITIES.Cologne, CITIES.Brussels, CITIES.Amsterdam, CITIES.Hamburg, CITIES.Dusseldorf],
+  @IsEnum(City,
     {
       message: UpdateOfferValidationMessage.city.invalidFormat,
     },
   )
-  public city?: CityType;
+  public city?: City;
 
   @IsOptional()
   @IsUrl(
@@ -52,56 +56,47 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @IsArray({message: UpdateOfferValidationMessage.photos.invalidFormat})
-  @ArrayMinSize(6, {message: UpdateOfferValidationMessage.photos.ArrayMinSize})
-  @ArrayMaxSize(6, {message: UpdateOfferValidationMessage.photos.ArrayMaxSize})
+  @ArrayMinSize(MIN_COUNT_PHOTOS, {message: UpdateOfferValidationMessage.photos.ArrayMinSize})
+  @ArrayMaxSize(MIN_COUNT_PHOTOS, {message: UpdateOfferValidationMessage.photos.ArrayMaxSize})
   public photos?: string[];
 
   @IsOptional()
-  @IsBoolean({message: UpdateOfferValidationMessage.isPremium.invalidFormat})
+  @IsBoolean({message: UpdateOfferValidationMessage.premium.invalidFormat})
   public premium?: boolean;
 
   @IsOptional()
-  @IsIn([HOUSE_TYPE.House, HOUSE_TYPE.Apartment, HOUSE_TYPE.Hotel, HOUSE_TYPE.Room], {
+  @IsEnum(PropertyType, {
     message: UpdateOfferValidationMessage.houseType.invalidFormat,
   })
-  public houseType?: HouseType;
+  public houseType?: PropertyType;
 
   @IsOptional()
   @IsInt({message: UpdateOfferValidationMessage.countRooms.invalidFormat})
-  @Min(1, {message: UpdateOfferValidationMessage.countRooms.minValue})
-  @Max(8, {message: UpdateOfferValidationMessage.countRooms.maxValue})
+  @Min(CountRooms.Min, {message: UpdateOfferValidationMessage.countRooms.minValue})
+  @Max(CountRooms.Max, {message: UpdateOfferValidationMessage.countRooms.maxValue})
   public countRooms?: number;
 
   @IsOptional()
   @IsInt({message: UpdateOfferValidationMessage.countGuests.invalidFormat})
-  @Min(1, {message: UpdateOfferValidationMessage.countGuests.minValue})
-  @Max(10, {message: UpdateOfferValidationMessage.countGuests.maxValue})
+  @Min(CountGuests.Min, {message: UpdateOfferValidationMessage.countGuests.minValue})
+  @Max(CountGuests.Max, {message: UpdateOfferValidationMessage.countGuests.maxValue})
   public countGuests?: number;
 
   @IsOptional()
   @IsInt({message: UpdateOfferValidationMessage.rentPrice.invalidFormat})
-  @Min(100, {message: UpdateOfferValidationMessage.rentPrice.minValue})
-  @Max(100000, {message: UpdateOfferValidationMessage.rentPrice.maxValue})
+  @Min(RentPrice.Min, {message: UpdateOfferValidationMessage.rentPrice.minValue})
+  @Max(RentPrice.Max, {message: UpdateOfferValidationMessage.rentPrice.maxValue})
   public rentPrice?: number;
 
   @IsOptional()
   @IsArray({message: UpdateOfferValidationMessage.amenities.invalidFormat})
-  @IsIn(
-    [
-      AMENITIES.Breakfast,
-      AMENITIES.AirConditioning,
-      AMENITIES.LaptopFriendlyWorkspace,
-      AMENITIES.BabySeat,
-      AMENITIES.Washer,
-      AMENITIES.Towels,
-      AMENITIES.Fridge,
-    ],
+  @IsEnum(Amenities,
     {
       each: true,
       message: UpdateOfferValidationMessage.amenities.invalidFormat,
     },
   )
-  public amenities?: AmenitiesType[];
+  public amenities?: Amenities[];
 
   @IsOptional()
   @ValidateNested()

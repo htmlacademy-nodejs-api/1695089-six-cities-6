@@ -6,11 +6,11 @@ import {inject, injectable} from 'inversify';
 import {Component, SortType} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {UpdateOfferDto} from './dto/update-offer.dto.js';
-import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './offer.constants.js';
 import {Types} from 'mongoose';
 import {UserEntity} from '../user/index.js';
 import {HttpError} from '../../libs/rest/index.js';
 import {StatusCodes} from 'http-status-codes';
+import {DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT} from './constants/index.js';
 
 
 @injectable()
@@ -23,6 +23,45 @@ export class DefaultOfferService implements OfferService {
   ) {
   }
 
+  private authorPipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'authorId',
+        foreignField: '_id',
+        as: 'users',
+      },
+    },
+    {
+      $addFields: {
+        author: { $arrayElemAt: ['$users', 0] },
+      },
+    },
+    {
+      $unset: ['users'],
+    },
+  ];
+
+  private commentsLookup = [
+    {
+      $lookup: {
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'offerId',
+        as: 'comments',
+      },
+    },
+    {
+      $addFields: {
+        commentCount: {$size: '$comments'},
+        totalRating: {$avg: '$comments.rating'},
+      }
+    },
+    {
+      $unset: 'comments'
+    }
+  ];
+
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.title}`);
@@ -30,29 +69,22 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findById(offerId: string, _userId?: string): Promise<DocumentType<OfferEntity> | null> {
     const result = await this.offerModel
       .aggregate([
         {
           $match: {_id: new Types.ObjectId(offerId)}
         },
+        ...this.commentsLookup,
         {
-          $lookup: {
-            from: 'comments',
-            localField: '_id',
-            foreignField: 'offerId',
-            as: 'comments',
+          $set: {
+            location: {
+              latitude: '$location.latitude',
+              longitude: '$location.longitude'
+            }
           }
         },
-        {
-          $addFields: {
-            commentCount: {$size: '$comments'},
-            totalRating: {$avg: '$comments.rating'},
-          }
-        },
-        {
-          $unset: 'comments'
-        }
+        ...this.authorPipeline,
       ])
       .exec();
 
@@ -62,21 +94,16 @@ export class DefaultOfferService implements OfferService {
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count ?? DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
+      ...this.commentsLookup,
       {
-        $lookup: {
-          from: 'comments',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'comments',
+        $set: {
+          location: {
+            latitude: '$location.latitude',
+            longitude: '$location.longitude'
+          }
         }
       },
-      {
-        $addFields: {
-          commentCount: {$size: '$comments'},
-          totalRating: {$avg: '$comments.rating'},
-        }
-      },
-      {$unset: ['comments']},
+      ...this.authorPipeline,
       {$sort: {createdAt: SortType.Down}},
       {$limit: limit},
     ])
@@ -92,7 +119,6 @@ export class DefaultOfferService implements OfferService {
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, {new: true})
-      .populate(['userId'])
       .exec();
   }
 
@@ -135,15 +161,6 @@ export class DefaultOfferService implements OfferService {
 
       return true;
     }
-  }
-
-  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel
-      .findByIdAndUpdate(offerId, {
-        '$inc': {
-          commentCount: 1,
-        }
-      }).exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {
