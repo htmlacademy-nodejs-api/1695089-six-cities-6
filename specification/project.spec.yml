@@ -266,9 +266,9 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: limit
+          description: city
           schema:
-            type: number
+            type: string
 
       responses:
         200:

@@ -1,4 +1,4 @@
-import {Amenities, PropertyType, Location, City} from '../../../types/index.js';
+import {Amenities, PropertyType, City} from '../../../types/index.js';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -22,6 +22,7 @@ import {
   OfferDescriptionLength,
   OfferTitleLength, RentPrice
 } from '../constants/index.js';
+import {LocationDto} from './create-offer.dto.js';
 
 export class UpdateOfferDto {
   @IsOptional()
@@ -100,5 +101,5 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @ValidateNested()
-  public location?: Location;
+  public location?: LocationDto;
 }

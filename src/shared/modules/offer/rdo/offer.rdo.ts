@@ -1,6 +1,15 @@
 import {Expose, Type} from 'class-transformer';
-import {Amenities, City, Location, PropertyType} from '../../../types/index.js';
+import {Amenities, City, PropertyType} from '../../../types/index.js';
 import {UserRdo} from '../../user/index.js';
+
+
+class LocationRdo {
+  @Expose()
+  public latitude: number;
+
+  @Expose()
+  public longitude: number;
+}
 
 export class OfferRdo {
   @Expose()
@@ -52,7 +61,8 @@ export class OfferRdo {
   public commentCount: number;
 
   @Expose()
-  public location: Location;
+  @Type(() => LocationRdo)
+  public location: LocationRdo;
 
   @Expose()
   @Type(() => UserRdo)
