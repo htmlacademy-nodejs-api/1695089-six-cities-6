@@ -1,7 +1,7 @@
 import {ClassConstructor, plainToInstance} from 'class-transformer';
 import {Error} from 'mongoose';
 import { ValidationError } from 'class-validator';
-import { ValidationErrorField } from '../libs/rest/index.js';
+import {ApplicationError, ValidationErrorField } from '../libs/rest/index.js';
 
 export function generateRandomValue(min: number, max: number, numAfterDigit = 0) {
   return +((Math.random() * (max - min)) + min).toFixed(numAfterDigit);
@@ -28,12 +28,9 @@ export function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
   });
 }
 
-export function createErrorObject(message: string) {
-  return {
-    error: message,
-  };
+export function createErrorObject(errorType: ApplicationError, error: string, details: ValidationErrorField[] = []) {
+  return {errorType, error, details};
 }
-
 export function reduceValidationErrors(errors: ValidationError[]): ValidationErrorField[] {
   return errors.map(({ property, value, constraints}) => ({
     property,
