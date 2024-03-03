@@ -8,6 +8,7 @@ import express, {Express} from 'express';
 import cors from 'cors';
 import {Controller, ExceptionFilter, ParseTokenMiddleware} from '../shared/libs/rest/index.js';
 import {STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE} from './rest.constant.js';
+import {AppRoutes} from '../shared/const/index.js';
 
 
 @injectable()
@@ -47,9 +48,9 @@ export class RestApplication {
   }
 
   private async _initControllers() {
-    this.server.use('/offers', this.offerController.router);
-    this.server.use('/users', this.userController.router);
-    this.server.use('/comments', this.commentController.router);
+    this.server.use(`/${AppRoutes.Offers}`, this.offerController.router);
+    this.server.use(`/${AppRoutes.Users}`, this.userController.router);
+    this.server.use(`/${AppRoutes.Comments}`, this.commentController.router);
   }
 
   private async _initMiddleware() {
