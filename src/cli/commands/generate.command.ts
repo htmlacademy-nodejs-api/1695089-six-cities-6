@@ -4,8 +4,8 @@ import {MockServerData} from '../../shared/types/index.js';
 import {TSVOfferGenerator} from '../../shared/libs/offer-generator/index.js';
 import {TSVFileWriter} from '../../shared/libs/file-writer/index.js';
 import {getErrorMessage} from '../../shared/helpers/index.js';
-import {DECIMAL_SYSTEM} from "../../shared/const/index.js";
-import {Commands} from "./command.constants.js";
+import {DECIMAL_SYSTEM} from '../../shared/const/index.js';
+import {Commands} from './command.constants.js';
 
 
 export class GenerateCommand implements Command {

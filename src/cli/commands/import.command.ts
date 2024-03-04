@@ -9,7 +9,6 @@ import {Offer} from '../../shared/types/index.js';
 import {Commands, DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD} from './command.constants.js';
 
 
-
 export class ImportCommand implements Command {
 
   private userService: UserService;

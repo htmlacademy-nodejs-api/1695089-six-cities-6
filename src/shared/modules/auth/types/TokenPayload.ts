@@ -8,4 +8,4 @@ export const TokenPayloadName = {
   Id: 'id',
   Username: 'username',
   Email: 'email'
-} as const
+} as const;

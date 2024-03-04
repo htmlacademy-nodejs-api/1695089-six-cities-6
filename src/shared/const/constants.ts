@@ -4,7 +4,7 @@ export const AppRoutes = {
   Comments: 'comments',
 } as const;
 
-export const DECIMAL_SYSTEM = 10
+export const DECIMAL_SYSTEM = 10;
 
 export const Retry = {
   Count: 5,
