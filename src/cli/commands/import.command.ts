@@ -6,7 +6,8 @@ import {DefaultOfferService, OfferModel, OfferService} from '../../shared/module
 import {ConsoleLogger, Logger} from '../../shared/libs/logger/index.js';
 import {DefaultUserService, UserModel, UserService} from '../../shared/modules/user/index.js';
 import {Offer} from '../../shared/types/index.js';
-import {DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD} from './command.constants.js';
+import {Commands, DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD} from './command.constants.js';
+
 
 
 export class ImportCommand implements Command {
@@ -28,7 +29,7 @@ export class ImportCommand implements Command {
   }
 
   getName(): string {
-    return '--import';
+    return Commands.import;
   }
 
   private async onImportedLine(line: string, resolve: () => void) {

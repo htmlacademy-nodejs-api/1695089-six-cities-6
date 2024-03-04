@@ -1,5 +1,6 @@
 import {Command} from './commands/command.interface.js';
 import {CommandParser} from './command-parser.js';
+import {Commands} from "./commands/command.constants.js";
 
 
 type CommandCollection = Record<string, Command>
@@ -8,7 +9,7 @@ export class CliApplication {
   private commands: CommandCollection = {};
 
   constructor(
-    private readonly defaultCommand = '--help'
+    private readonly defaultCommand = Commands.help
   ) {}
 
   public registerCommands(commandList: Command[]) {
