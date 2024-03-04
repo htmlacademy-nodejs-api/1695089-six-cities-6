@@ -4,14 +4,15 @@ import {StatusCodes} from 'http-status-codes';
 import {createSecretKey} from 'node:crypto';
 import {Middleware} from './middleware.interface.js';
 import {HttpError} from '../errors/index.js';
-import {TokenPayload} from '../../../modules/auth/index.js';
+import {TokenPayload, TokenPayloadName} from '../../../modules/auth/index.js';
+
 
 function isTokenPayload(payload: unknown): payload is TokenPayload {
   return (
     (typeof payload === 'object' && payload !== null) &&
-    ('email' in payload && typeof payload.email === 'string') &&
-    ('username' in payload && typeof payload.username === 'string') &&
-    ('id' in payload && typeof payload.id === 'string')
+    (TokenPayloadName.Email in payload && typeof payload.email === 'string') &&
+    (TokenPayloadName.Username in payload && typeof payload.username === 'string') &&
+    (TokenPayloadName.Id in payload && typeof payload.id === 'string')
   );
 }
 

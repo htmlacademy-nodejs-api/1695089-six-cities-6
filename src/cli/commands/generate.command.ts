@@ -4,6 +4,9 @@ import {MockServerData} from '../../shared/types/index.js';
 import {TSVOfferGenerator} from '../../shared/libs/offer-generator/index.js';
 import {TSVFileWriter} from '../../shared/libs/file-writer/index.js';
 import {getErrorMessage} from '../../shared/helpers/index.js';
+import {DECIMAL_SYSTEM} from '../../shared/const/index.js';
+import {Commands} from './command.constants.js';
+
 
 export class GenerateCommand implements Command {
   private initialData: MockServerData;
@@ -26,12 +29,12 @@ export class GenerateCommand implements Command {
   }
 
   public getName(): string {
-    return '--generate';
+    return Commands.generate;
   }
 
   public async execute(...parameters: string[]) {
     const [count, filepath, url] = parameters;
-    const offerCount = parseInt(count, 10);
+    const offerCount = parseInt(count, DECIMAL_SYSTEM);
 
     try {
       await this.load(url);

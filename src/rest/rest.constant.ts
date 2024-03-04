@@ -1,2 +1,4 @@
-export const STATIC_UPLOAD_ROUTE = '/upload';
-export const STATIC_FILES_ROUTE = '/static';
+export const StaticPath = {
+  Upload: '/upload',
+  Static: '/static',
+} as const;
