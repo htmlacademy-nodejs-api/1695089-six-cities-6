@@ -27,7 +27,7 @@ export class DefaultOfferService implements OfferService {
     {
       $lookup: {
         from: 'users',
-        localField: 'authorId',
+        localField: 'userId',
         foreignField: '_id',
         as: 'users',
       },

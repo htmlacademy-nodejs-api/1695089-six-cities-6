@@ -66,5 +66,5 @@ export class OfferRdo {
 
   @Expose()
   @Type(() => UserRdo)
-  public user: UserRdo;
+  public author: UserRdo;
 }
