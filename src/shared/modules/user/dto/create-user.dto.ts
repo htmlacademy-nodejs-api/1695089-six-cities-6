@@ -1,6 +1,5 @@
-import {UserStatusType} from '../../../types/index.js';
+import {USER_STATUS, UserStatusType} from '../../../types/index.js';
 import {IsEmail, IsIn, IsString, Length} from 'class-validator';
-import {USER_STATUS} from '../../../../../dist/shared/types/index.js';
 import {CreateUserMessages} from './create-user.messages.js';
 import {UserNameLength, UserPasswordLength} from '../constants/index.js';
 
